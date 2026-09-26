@@ -1,266 +1,344 @@
-# 🏥 Hospital Management Backend
+# 🏥 Hospital Management System — Backend
 
-A **Microservices-based Hospital Management System** built using **Java, Spring Boot, Spring Cloud, REST APIs, and MySQL**.
+A **scalable Hospital Management System backend** built using **Java, Spring Boot, Spring Cloud, and Microservices Architecture**.
 
-The project is designed to manage hospital-related operations such as users, patient profiles, appointments, pharmacy services, and service communication through an API Gateway.
+The system is designed to manage hospital operations such as **user management, patient profiles, appointments, pharmacy services, and secure API communication** through a centralized API Gateway.
+
+---
 
 ## 🚀 Project Overview
 
-The Hospital Management Backend follows a **Microservices Architecture**, where different business functionalities are separated into independent services.
+This project follows a **Microservices Architecture**, where different business functionalities are separated into independent Spring Boot services.
 
-### Main Services
+The backend currently contains the following services:
 
-* **Eureka Server** — Service discovery and registration
-* **GatewayMS** — API Gateway and centralized request routing
-* **UserMS** — User registration, authentication, and user management
-* **ProfileMS** — Patient/user profile management
-* **Appointment** — Appointment management
-* **PharmacyMS** — Pharmacy-related operations
+* 👤 **UserMS** — User management and authentication
+* 🧑‍⚕️ **ProfileMS** — Patient/profile management
+* 📅 **Appointment** — Appointment management
+* 💊 **PharmacyMS** — Pharmacy and medicine-related operations
+* 🌐 **GatewayMS** — Central API Gateway
+* 🔎 **Eureka-Server** — Service discovery
+
+The repository structure currently contains these six backend modules.
+
+---
 
 ## 🏗️ Architecture
 
 ```text
-                         ┌─────────────────────┐
-                         │      Frontend       │
-                         │   React / Client    │
-                         └──────────┬──────────┘
+                         ┌──────────────────────┐
+                         │       React App      │
+                         │      Frontend        │
+                         └──────────┬───────────┘
                                     │
+                                    │ REST API
                                     ▼
-                         ┌─────────────────────┐
-                         │      GatewayMS      │
-                         │   API Gateway       │
-                         │   Port: 9000        │
-                         └──────────┬──────────┘
+                         ┌──────────────────────┐
+                         │      GatewayMS       │
+                         │    API Gateway       │
+                         │      Port: 9000      │
+                         └──────────┬───────────┘
                                     │
-              ┌─────────────────────┼─────────────────────┐
-              │                     │                     │
-              ▼                     ▼                     ▼
-       ┌─────────────┐       ┌─────────────┐       ┌─────────────┐
-       │   UserMS    │       │  ProfileMS  │       │ Appointment │
-       │             │       │             │       │     MS      │
-       └──────┬──────┘       └──────┬──────┘       └──────┬──────┘
-              │                     │                     │
-              └─────────────────────┼─────────────────────┘
-                                    │
-                                    ▼
-                         ┌─────────────────────┐
-                         │   MySQL Database    │
-                         └─────────────────────┘
+                  ┌─────────────────┼─────────────────┐
+                  │                 │                 │
+                  ▼                 ▼                 ▼
+           ┌────────────┐    ┌────────────┐    ┌──────────────┐
+           │   UserMS   │    │ ProfileMS  │    │ Appointment  │
+           │            │    │            │    │     MS       │
+           └─────┬──────┘    └─────┬──────┘    └──────┬───────┘
+                 │                 │                  │
+                 └─────────────────┼──────────────────┘
+                                   │
+                                   ▼
+                            ┌──────────────┐
+                            │  PharmacyMS  │
+                            └──────────────┘
 
-
-                         ┌─────────────────────┐
-                         │    Eureka Server    │
-                         │  Service Discovery  │
-                         └─────────────────────┘
+                    ┌──────────────────────┐
+                    │    Eureka Server     │
+                    │   Service Discovery  │
+                    └──────────────────────┘
 ```
 
-## 📂 Project Structure
+---
+
+# 🧩 Microservices
+
+## 1. 👤 UserMS
+
+Responsible for user-related functionality.
+
+### Responsibilities
+
+* User registration
+* User login
+* User management
+* Password management
+* Authentication
+* JWT token generation
+* User-related APIs
+
+---
+
+## 2. 🧑‍⚕️ ProfileMS
+
+Responsible for managing patient/user profile information.
+
+### Responsibilities
+
+* Create profile
+* View profile
+* Update profile
+* Patient information management
+* Profile-related APIs
+
+---
+
+## 3. 📅 AppointmentMS
+
+Responsible for hospital appointment management.
+
+### Responsibilities
+
+* Create appointments
+* View appointments
+* Update appointments
+* Appointment status management
+* Patient appointment workflow
+* Doctor appointment workflow
+
+---
+
+## 4. 💊 PharmacyMS
+
+Responsible for pharmacy-related operations.
+
+### Responsibilities
+
+* Medicine management
+* Pharmacy information
+* Medicine availability
+* Pharmacy-related APIs
+
+---
+
+## 5. 🌐 GatewayMS
+
+The **API Gateway** acts as the single entry point for frontend requests.
+
+### Responsibilities
+
+* API routing
+* Centralized request handling
+* CORS configuration
+* JWT filtering
+* Security filtering
+* Communication with microservices
+
+### Request Flow
+
+```text
+Frontend
+   │
+   ▼
+GatewayMS
+   │
+   ├── /users/**        → UserMS
+   ├── /profile/**      → ProfileMS
+   ├── /appointment/**  → AppointmentMS
+   └── /pharmacy/**     → PharmacyMS
+```
+
+---
+
+## 6. 🔎 Eureka Server
+
+Eureka provides **service discovery** for the microservices.
+
+Instead of hardcoding service locations, services register themselves with Eureka.
+
+```text
+                Eureka Server
+                     │
+        ┌────────────┼────────────┐
+        │            │            │
+        ▼            ▼            ▼
+      UserMS     ProfileMS    AppointmentMS
+        │            │            │
+        └────────────┼────────────┘
+                     │
+                     ▼
+                PharmacyMS
+```
+
+---
+
+# 🛠️ Tech Stack
+
+| Technology           | Purpose                       |
+| -------------------- | ----------------------------- |
+| Java                 | Backend Programming           |
+| Spring Boot          | Microservices                 |
+| Spring Cloud         | Microservices Infrastructure  |
+| Spring Cloud Gateway | API Gateway                   |
+| Eureka               | Service Discovery             |
+| Spring Security      | Application Security          |
+| JWT                  | Authentication                |
+| Spring Data JPA      | Database Access               |
+| Hibernate            | ORM                           |
+| MySQL                | Database                      |
+| Maven                | Build & Dependency Management |
+| REST API             | API Communication             |
+| Postman              | API Testing                   |
+| Git                  | Version Control               |
+| GitHub               | Source Code Management        |
+
+---
+
+# 📂 Project Structure
 
 ```text
 hospital-management-backend/
 │
 ├── Appointment/
-│   └── Appointment Microservice
+│   ├── src/
+│   ├── pom.xml
+│   └── ...
 │
 ├── Eureka-Server/
-│   └── Service Discovery Server
+│   ├── src/
+│   ├── pom.xml
+│   └── ...
 │
 ├── GatewayMS/
-│   └── API Gateway
+│   ├── src/
+│   ├── pom.xml
+│   └── ...
 │
 ├── PharmacyMS/
-│   └── Pharmacy Microservice
+│   ├── src/
+│   ├── pom.xml
+│   └── ...
 │
 ├── ProfileMS/
-│   └── Profile Microservice
+│   ├── src/
+│   ├── pom.xml
+│   └── ...
 │
 ├── UserMS/
-│   └── User Microservice
+│   ├── src/
+│   ├── pom.xml
+│   └── ...
 │
 └── media/
-    └── Project media/resources
 ```
 
-## 🛠️ Technologies Used
+The repository currently has the above service directories at its root.
 
-| Technology           | Purpose                        |
-| -------------------- | ------------------------------ |
-| Java                 | Backend programming            |
-| Spring Boot          | Microservice development       |
-| Spring Cloud         | Microservices infrastructure   |
-| Spring Cloud Gateway | API Gateway                    |
-| Eureka               | Service Discovery              |
-| Spring Data JPA      | Database operations            |
-| Hibernate            | ORM                            |
-| MySQL                | Relational database            |
-| REST API             | Service communication          |
-| Maven                | Dependency management          |
-| JWT                  | Authentication & authorization |
-| Postman              | API testing                    |
-| Git & GitHub         | Version control                |
+---
 
-## 🔐 Authentication Flow
+# 🔐 Authentication Architecture
 
-The application can use JWT-based authentication for securing APIs.
+The application uses **JWT-based authentication**.
+
+### Login Flow
 
 ```text
-Client
-  │
-  │ Login
-  ▼
+User
+ │
+ ▼
+React Frontend
+ │
+ ▼
 GatewayMS
-  │
-  ▼
+ │
+ ▼
 UserMS
-  │
-  ├── Validate User
-  ├── Generate JWT
-  │
-  ▼
-JWT Token
-  │
-  ▼
-Client
+ │
+ ▼
+Validate Credentials
+ │
+ ▼
+Generate JWT
+ │
+ ▼
+Return JWT
+ │
+ ▼
+Frontend
 ```
 
-For subsequent requests:
+For protected requests:
 
 ```text
-Client
+Frontend
    │
    │ Authorization: Bearer <JWT>
    ▼
 GatewayMS
    │
-   ├── Validate JWT
-   │
    ▼
-Microservice
+JWT Filter
    │
-   ▼
-Response
+   ├── Valid Token ──────► Microservice
+   │
+   └── Invalid Token ────► 401 Unauthorized
 ```
 
-## 🔄 Request Flow
+---
 
-A typical API request follows this flow:
+# 🔄 Complete Request Flow
 
 ```text
-Frontend
-   ↓
-API Gateway
-   ↓
-Service Discovery
-   ↓
-Required Microservice
-   ↓
-Repository
-   ↓
-MySQL
+┌───────────────┐
+│ React Frontend│
+└───────┬───────┘
+        │
+        │ HTTP Request
+        ▼
+┌───────────────┐
+│   GatewayMS   │
+└───────┬───────┘
+        │
+        │ Route
+        ▼
+┌───────────────┐
+│ Eureka Server │
+└───────┬───────┘
+        │
+        ▼
+┌───────────────────────┐
+│ Required Microservice │
+└───────────┬───────────┘
+            │
+            ▼
+┌───────────────────────┐
+│ Controller            │
+└───────────┬───────────┘
+            │
+            ▼
+┌───────────────────────┐
+│ Service Layer         │
+└───────────┬───────────┘
+            │
+            ▼
+┌───────────────────────┐
+│ Repository / JPA      │
+└───────────┬───────────┘
+            │
+            ▼
+┌───────────────────────┐
+│ MySQL Database        │
+└───────────────────────┘
 ```
 
-Example:
+---
 
-```text
-POST /users/login
-        ↓
-GatewayMS
-        ↓
-UserMS
-        ↓
-UserRepository
-        ↓
-MySQL
-```
+# 🗄️ Database
 
-## 🌐 Service Responsibilities
+The application uses **MySQL** for persistent data storage.
 
-### 1. UserMS
-
-Responsible for:
-
-* User registration
-* User login
-* User authentication
-* Password management
-* JWT generation
-* User-related operations
-
-### 2. ProfileMS
-
-Responsible for:
-
-* Patient profile management
-* Personal information
-* Profile creation/update
-* Patient-related information
-
-### 3. AppointmentMS
-
-Responsible for:
-
-* Creating appointments
-* Updating appointments
-* Viewing appointments
-* Appointment status management
-* Patient-doctor appointment workflow
-
-### 4. PharmacyMS
-
-Responsible for:
-
-* Medicine-related operations
-* Pharmacy management
-* Medicine information
-* Pharmacy-related APIs
-
-### 5. GatewayMS
-
-Acts as the single entry point for client requests.
-
-Responsibilities:
-
-* Request routing
-* Centralized API entry point
-* CORS handling
-* JWT filtering/security
-* Communication with backend services
-
-### 6. Eureka Server
-
-Responsible for:
-
-* Service registration
-* Service discovery
-* Maintaining information about available microservices
-* Helping services communicate without hardcoding service locations
-
-## ⚙️ Prerequisites
-
-Before running the project, install:
-
-* Java 17+
-* Maven
-* MySQL
-* Git
-* Postman
-* IDE such as IntelliJ IDEA / Eclipse / Spring Tool Suite
-
-## 🔧 Configuration
-
-Configure database credentials in each microservice's:
-
-```text
-application.properties
-```
-
-or
-
-```text
-application.yml
-```
-
-Example:
+Example configuration:
 
 ```properties
 spring.datasource.url=jdbc:mysql://localhost:3306/hospital_db
@@ -271,23 +349,62 @@ spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 ```
 
-> **Important:** Never commit real database passwords, JWT secrets, API keys, or other credentials to GitHub. Use environment variables or a local configuration file.
+For production, database credentials should be supplied through environment variables or secure configuration rather than committed to GitHub.
 
-## ▶️ How to Run
+---
 
-### 1. Clone Repository
+# ⚙️ Prerequisites
+
+Install the following before running the project:
+
+* Java 17+
+* Maven
+* MySQL
+* Git
+* Postman
+* IntelliJ IDEA / Eclipse / Spring Tool Suite
+
+---
+
+# 🚀 Installation & Setup
+
+## 1. Clone Repository
 
 ```bash
 git clone https://github.com/tabrez-tech-09/hospital-management-backend.git
 ```
 
+Navigate to the project:
+
 ```bash
 cd hospital-management-backend
 ```
 
-### 2. Start Eureka Server
+---
 
-Navigate to:
+## 2. Configure MySQL
+
+Create the required database:
+
+```sql
+CREATE DATABASE hospital_db;
+```
+
+Then configure the database credentials in the respective microservice configuration.
+
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/hospital_db
+spring.datasource.username=root
+spring.datasource.password=YOUR_PASSWORD
+```
+
+---
+
+# ▶️ Running the Project
+
+Start the services in the following order.
+
+### Step 1 — Eureka Server
 
 ```text
 Eureka-Server
@@ -299,119 +416,266 @@ Run:
 mvn spring-boot:run
 ```
 
-### 3. Start Backend Microservices
+---
 
-Start the services individually:
+### Step 2 — UserMS
 
 ```text
 UserMS
+```
+
+Run:
+
+```bash
+mvn spring-boot:run
+```
+
+---
+
+### Step 3 — ProfileMS
+
+```text
 ProfileMS
+```
+
+Run:
+
+```bash
+mvn spring-boot:run
+```
+
+---
+
+### Step 4 — AppointmentMS
+
+```text
 Appointment
+```
+
+Run:
+
+```bash
+mvn spring-boot:run
+```
+
+---
+
+### Step 5 — PharmacyMS
+
+```text
 PharmacyMS
 ```
 
-### 4. Start Gateway
+Run:
 
-Finally start:
+```bash
+mvn spring-boot:run
+```
+
+---
+
+### Step 6 — GatewayMS
 
 ```text
 GatewayMS
 ```
 
-The frontend should communicate with the backend through the **Gateway**, rather than directly calling every microservice.
+Run:
 
-## 🧪 API Testing
+```bash
+mvn spring-boot:run
+```
 
-Use **Postman** to test APIs.
+---
 
-Example:
+# 🌐 Service Ports
+
+Example service configuration:
+
+| Service       |   Port |
+| ------------- | -----: |
+| GatewayMS     | `9000` |
+| UserMS        | `8081` |
+| ProfileMS     | `9100` |
+| AppointmentMS | `9200` |
+| Eureka Server | `8761` |
+
+> Update these values if your current `application.yml` / `application.properties` uses different ports.
+
+---
+
+# 🧪 API Testing
+
+Use **Postman** or another REST API client for testing.
+
+Example APIs:
 
 ```http
 POST /users/register
 POST /users/login
-GET  /profile/...
+
+GET /profile/...
+
 POST /appointment/...
-GET  /pharmacy/...
+GET /appointment/...
+
+GET /pharmacy/...
+POST /pharmacy/...
 ```
 
-Actual endpoints may vary according to the controllers implemented in each microservice.
+Protected APIs should receive the JWT token:
 
-## 🔒 Security
+```http
+Authorization: Bearer <JWT_TOKEN>
+```
 
-Security-related components include:
+---
+
+# 🔒 Security
+
+Security features include:
 
 * JWT authentication
-* Gateway-level request filtering
-* Authorization
 * Password hashing
+* Gateway-level JWT filtering
 * Protected APIs
+* CORS configuration
+* Authentication and authorization
 
-### Recommended Security Practices
+### Security Best Practices
 
-* Store JWT secrets in environment variables.
-* Never commit passwords to Git.
-* Never expose production database credentials.
-* Use HTTPS in production.
-* Validate and sanitize incoming requests.
-
-## 📊 Microservices Communication
-
-The project uses a service-oriented architecture where services can communicate through APIs and service discovery.
+Never commit:
 
 ```text
-                 Eureka Server
-                      │
-        ┌─────────────┼─────────────┐
-        │             │             │
-        ▼             ▼             ▼
-     UserMS       ProfileMS    AppointmentMS
-        │             │             │
-        └─────────────┼─────────────┘
-                      │
-                 PharmacyMS
+❌ Database passwords
+❌ JWT secrets
+❌ API keys
+❌ Private credentials
 ```
 
-## 🎯 Key Features
+Use:
+
+```text
+.env
+Environment Variables
+Secret Manager
+```
+
+for sensitive configuration.
+
+---
+
+# 🌍 Frontend Integration
+
+The frontend communicates with the backend through the Gateway.
+
+```text
+React
+  │
+  │ HTTP
+  ▼
+GatewayMS : 9000
+  │
+  ├── UserMS
+  ├── ProfileMS
+  ├── AppointmentMS
+  └── PharmacyMS
+```
+
+Frontend Repository:
+
+https://github.com/tabrez-tech-09/hospital-management-frontend
+
+Live Application:
+
+https://pulse-five-ruby.vercel.app/login
+
+---
+
+# 📌 Key Features
 
 * ✅ Microservices Architecture
-* ✅ Service Discovery using Eureka
-* ✅ API Gateway
+* ✅ Spring Boot
+* ✅ Spring Cloud
+* ✅ Eureka Service Discovery
+* ✅ Spring Cloud Gateway
 * ✅ JWT Authentication
 * ✅ User Management
 * ✅ Patient Profile Management
 * ✅ Appointment Management
 * ✅ Pharmacy Management
-* ✅ REST APIs
 * ✅ MySQL Database
 * ✅ Spring Data JPA
-* ✅ Maven-based project
-* ✅ Postman API testing
-
-## 📈 Future Improvements
-
-* Docker & Docker Compose
-* Centralized configuration using Spring Cloud Config
-* Redis caching
-* Kafka/RabbitMQ for asynchronous communication
-* Centralized logging
-* API documentation with Swagger/OpenAPI
-* Rate limiting
-* Monitoring with Prometheus & Grafana
-* CI/CD using GitHub Actions
-* Cloud deployment
-
-## 👨‍💻 Author
-
-**Tabrez Rabbani**
-
-* GitHub: https://github.com/tabrez-tech-09
-* LinkedIn: https://www.linkedin.com/in/tabrez-rabbani/
-
-## ⭐ Support
-
-If you find this project useful, consider giving the repository a ⭐ on GitHub.
+* ✅ REST APIs
+* ✅ CORS Configuration
+* ✅ Postman API Testing
 
 ---
 
-**Hospital Management Backend**
-*Built with Java + Spring Boot + Spring Cloud + Microservices*
+# 📈 Future Improvements
+
+* [ ] Docker & Docker Compose
+* [ ] Centralized configuration with Spring Cloud Config
+* [ ] Redis caching
+* [ ] Kafka/RabbitMQ messaging
+* [ ] Swagger/OpenAPI documentation
+* [ ] Centralized logging
+* [ ] Prometheus monitoring
+* [ ] Grafana dashboards
+* [ ] CI/CD with GitHub Actions
+* [ ] Kubernetes deployment
+* [ ] Rate limiting
+* [ ] Distributed tracing
+
+---
+
+# 🧠 What This Project Demonstrates
+
+This project demonstrates practical understanding of:
+
+* Microservices architecture
+* Spring Boot
+* Spring Cloud
+* API Gateway
+* Service Discovery
+* JWT authentication
+* REST API development
+* Database integration
+* Inter-service communication
+* CORS configuration
+* Backend security
+* Distributed application architecture
+
+---
+
+# 👨‍💻 Author
+
+## Tabrez Rabbani
+
+**Java Backend Developer | Spring Boot | Microservices | React**
+
+### Profiles
+
+* GitHub: https://github.com/tabrez-tech-09
+* LinkedIn: https://www.linkedin.com/in/tabrez-rabbani/
+* LeetCode: https://leetcode.com/u/tabrez_tech/
+
+---
+
+# ⭐ Support
+
+If you find this project useful, consider giving the repository a ⭐.
+
+---
+
+## 🏥 Hospital Management System
+
+**Frontend:** React.js
+**Backend:** Java + Spring Boot
+**Architecture:** Microservices
+**Gateway:** Spring Cloud Gateway
+**Service Discovery:** Eureka
+**Database:** MySQL
+**Authentication:** JWT
+**Deployment:** Cloud-ready
+
